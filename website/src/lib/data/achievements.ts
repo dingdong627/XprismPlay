@@ -354,8 +354,8 @@ export const ACHIEVEMENTS: AchievementDef[] = [
 		description: 'Get to floor 10 on hard mode and cash out',
 		icon: '../facedev/bliptext.png',
 		difficulty: 'legendary',
-		cashReward: 25000,
-		gemReward: 75,
+		cashReward: 100000,
+		gemReward: 600,
 		category: 'arcade'
 	},
 	{
