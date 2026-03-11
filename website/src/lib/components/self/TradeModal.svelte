@@ -24,7 +24,7 @@
 		onSuccess
 	} = $props<{
 		open?: boolean;
-		type: 'BUY' | 'SELL';
+		type: 'BUY' | 'SELL' | 'BURN';
 		coin: any;
 		userHolding?: number;
 		onSuccess?: () => void;
@@ -36,6 +36,14 @@
 
 	let numericAmount = $derived(parseFloat(amount) || 0);
 	let currentPrice = $derived(coin.currentPrice || 0);
+
+
+	let poolTokensAfterBurn = $derived(() => {
+		if (type !== 'BURN' || numericAmount <= 0) return numericAmount;
+		const poolCoin = Number(coin.poolCoinAmount);
+		let finalTokenCount = poolCoin - numericAmount;
+		if (finalTokenCount != 0) return finalTokenCount;
+	});
 
 	let maxSellableAmount = $derived(
 		type === 'SELL' && coin
@@ -128,11 +136,13 @@
 			}
 
 			haptic.trigger('success');
-			toast.success(`${type === 'BUY' ? 'Bought' : 'Sold'} successfully!`, {
+			toast.success(`${type === 'BUY' ? 'Bought' : type === 'SELL' ? 'Sold' : 'Burned'} successfully!`, {
 				description:
 					type === 'BUY'
 						? `Purchased ${result.coinsBought.toFixed(6)} ${coin.symbol} for $${result.totalCost.toFixed(6)}`
-						: `Sold ${result.coinsSold.toFixed(6)} ${coin.symbol} for $${result.totalReceived.toFixed(6)}`
+						: type === 'SELL'
+							? `Sold ${result.coinsSold.toFixed(6)} ${coin.symbol} for $${result.totalReceived.toFixed(6)}`
+							: `Burned ${result.coinsBurned.toFixed(6)} ${coin.symbol}`
 			});
 
 			onSuccess?.();
@@ -278,7 +288,7 @@
 					<HugeiconsIcon icon={Loading03Icon} class="h-4 w-4 animate-spin" />
 					Processing...
 				{:else}
-					{type === 'BUY' ? 'Buy' : 'Sell'} {coin.symbol}
+					{type === 'BUY' ? 'Buy' : type === 'SELL' ? 'Sell' : 'Burn'} {coin.symbol}
 				{/if}
 			</Button>
 		</Dialog.Footer>
