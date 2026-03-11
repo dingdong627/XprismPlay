@@ -302,6 +302,7 @@ export const promoCode = pgTable('promo_code', {
 	rewardType: promoRewardTypeEnum('reward_type').notNull().default('BASE_CURRENCY'),
 	maxUses: integer('max_uses'), // null = unlimited
 	isActive: boolean('is_active').notNull().default(true),
+	isSecret: boolean('is_secret').notNull().default(false),
 	expiresAt: timestamp('expires_at', { withTimezone: true }),
 	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 	createdBy: integer('created_by').references(() => user.id, { onDelete: 'set null' })

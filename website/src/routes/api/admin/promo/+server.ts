@@ -12,7 +12,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		throw error(403, 'Admin access required');
 	}
 
-	const { code, description, rewardAmount, rewardType, maxUses, expiresAt } = await request.json();
+	const { code, description, rewardAmount, rewardType, maxUses, expiresAt, isSecret } = await request.json();
 
 	if (!code || !rewardAmount || !rewardType) {
 		return json({ error: 'Code, reward amount, and reward type are required' }, { status: 400 });
@@ -39,17 +39,20 @@ export const POST: RequestHandler = async ({ request }) => {
 			rewardAmount: Number(rewardAmount).toFixed(8),
 			rewardType: rewardType, // Save the reward type
 			maxUses: maxUses || null,
+			isSecret: Boolean(isSecret),
 			expiresAt: expiresAt ? new Date(expiresAt) : null,
 			createdBy: userId
 		})
 		.returning();
-
-	writeAdminLog(
-		userId,
-		'PROMO_CREATE',
-		null,
-		`Code: ${normalizedCode}, Amount: ${rewardAmount}, Type: ${rewardType}`
-	);
+    
+	if (isSecret) {
+		writeAdminLog(
+			userId,
+			'PROMO_CREATE',
+			null,
+			`Code: ${normalizedCode}, Amount: ${rewardAmount}, Type: ${rewardType}`
+		);
+    }
 
 	return json({
 		success: true,
@@ -111,6 +114,7 @@ export const GET: RequestHandler = async ({ request }) => {
 		})
 		.from(promoCode)
 		.leftJoin(promoCodeRedemption, eq(promoCode.id, promoCodeRedemption.promoCodeId))
+		.where(eq(promoCode.isSecret, false))
 		.groupBy(promoCode.id);
 
 	return json({

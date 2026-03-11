@@ -244,7 +244,7 @@
 			</div>
 
 			<!-- Estimated Cost/Return with explicit fees -->
-			{#if hasValidAmount}
+			{#if hasValidAmount && type !== 'BURN'}
 				<div class="bg-muted/50 rounded-lg p-3">
 					<div class="flex items-center justify-between">
 						<span class="text-sm font-medium">

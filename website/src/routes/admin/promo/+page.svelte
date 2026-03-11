@@ -2,6 +2,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
+	import { Switch } from '$lib/components/ui/switch';
 	import * as Select from '$lib/components/ui/select';
 	import {
 		Card,
@@ -38,6 +39,7 @@
 	let createSuccess = $state(false);
 	let createMessage = $state('');
 	let hasCreateResult = $state(false);
+	let isSecret = $state(false);
 
 	const expirationOptions = [
 		{ value: '1h', label: '1 Hour' },
@@ -101,6 +103,7 @@
 					rewardType: rewardType,
 					maxUses: maxUses ? parseInt(maxUses) : null,
 					expiresAt: expirationOption ? getExpirationDate(expirationOption) : null
+					isSecret: isSecret
 				})
 			});
 
@@ -118,6 +121,7 @@
 				maxUses = '';
 				expirationOption = '';
 				rewardType = 'BASE_CURRENCY';
+				isSecret = false;
 				await loadPromoCodes();
 			}
 		} catch (error) {
@@ -275,6 +279,16 @@
 									</Select.Content>
 								</Select.Root>
 							</div>
+						</div>
+						
+						<div class="flex items-center justify-between rounded-lg border p-3">
+							<div class="space-y-0.5">
+								<Label for="secret">Secret Promo Code</Label>
+								<p class="text-muted-foreground text-xs">
+									Hide this code from the active list below. It will still be redeemable.
+								</p>
+							</div>
+							<Switch id="secret" bind:checked={isSecret} disabled={isCreating} />
 						</div>
 
 						{#if hasCreateResult}
