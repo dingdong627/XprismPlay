@@ -1,12 +1,7 @@
 <script lang="ts">
 	import type { UserProfile } from '$lib/types/user-profile';
 	import SilentBadge from './SilentBadge.svelte';
-	import {
-		HashtagIcon,
-		KnightShieldIcon,
-		Fire02Icon,
-		StarIcon, 
-	} from '@hugeicons/core-free-icons';
+	import { HashtagIcon, KnightShieldIcon, Fire02Icon, StarIcon } from '@hugeicons/core-free-icons';
 	import { getPrestigeName, getPrestigeColor } from '$lib/utils';
 
 	let {
