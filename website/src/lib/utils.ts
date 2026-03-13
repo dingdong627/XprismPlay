@@ -342,6 +342,10 @@ export function showSchoolPrideCannons(confetti: any) {
 		}
 	})();
 }
+export function calcPrestigePrice(prestigeLevel: number) {
+	if(prestigeLevel === 1) return 100_000
+	return Math.round(100_000 * 2.1**(prestigeLevel-1))
+}
 
 export const formatMarketCap = formatValue;
 
@@ -361,13 +365,21 @@ export function timeToLocal(originalTime: number): number {
 }
 
 export const PRESTIGE_COSTS = {
-	1: 100_000,
-	2: 250_000, // 2.5x
-	3: 625_000, // 2.5x
-	4: 1_562_500, // 2.5x
-	5: 3_906_250, // 2.5x
-	6: 9_765_625, // 2.5x
-	7: 24_414_062 // 2.5x
+	1: calcPrestigePrice(1),
+	2: calcPrestigePrice(2),
+	3: calcPrestigePrice(3),
+	4: calcPrestigePrice(4),
+	5: calcPrestigePrice(5),
+	6: calcPrestigePrice(6),
+	7: calcPrestigePrice(7),
+	8: calcPrestigePrice(8),
+	9: calcPrestigePrice(9),
+	10: calcPrestigePrice(10),
+	11: calcPrestigePrice(11),
+	12: calcPrestigePrice(12),
+	13: calcPrestigePrice(13),
+	14: calcPrestigePrice(14),
+	15: calcPrestigePrice(15),
 } as const;
 
 export const PRESTIGE_NAMES = {
@@ -377,7 +389,15 @@ export const PRESTIGE_NAMES = {
 	4: 'Prestige IV',
 	5: 'Prestige V',
 	6: 'Prestige VI',
-	7: 'Prestige VII'
+	7: 'Prestige VII',
+	8: 'Prestige VIII',
+	9: 'Prestige IX',
+	10: 'Prestige X',
+	11: 'Prestige XI',
+	12: 'Prestige XII',
+	13: 'Prestige XIII',
+	14: 'Prestige XIX',
+	15: 'Prestige XV'
 } as const;
 
 export const PRESTIGE_COLORS = {
@@ -387,7 +407,15 @@ export const PRESTIGE_COLORS = {
 	4: 'text-orange-500',
 	5: 'text-red-500',
 	6: 'text-cyan-500',
-	7: 'text-emerald-500'
+	7: 'text-emerald-500',
+	8: 'text-lime-500',
+	9: 'text-pink-500',
+	10: 'text-red-700',
+	11: 'text-sky-500',
+	12: 'text-fuchsia-500',
+	13: 'text-emerald-700',
+	14: 'text-rose-500',
+	15: 'text-purple-500'
 } as const;
 
 export function getPrestigeName(level: number): string | null {
@@ -409,7 +437,7 @@ export function getPrestigeColor(level: number): string {
 }
 
 export function getMaxPrestigeLevel(): number {
-	return 7;
+	return 15;
 }
 
 export function validateBetAmount(
