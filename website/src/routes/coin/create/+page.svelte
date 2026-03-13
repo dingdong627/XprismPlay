@@ -33,14 +33,14 @@
 	});
 
 	let nameError = $derived(
-		name.length > 0 && (name.length < 2 || name.length > 255)
-			? 'Name must be between 2 and 255 characters'
+		name.length > 0 && (name.length < 2 || name.length > 60)
+			? 'Name must be between 2 and 60 characters'
 			: ''
 	);
 
 	let symbolError = $derived(
-		symbol.length > 0 && (symbol.length < 2 || symbol.length > 10)
-			? 'Symbol must be between 2 and 10 characters'
+		symbol.length > 0 && (symbol.length < 2 || symbol.length > 13)
+			? 'Symbol must be between 2 and 13 characters'
 			: ''
 	);
 
@@ -232,7 +232,7 @@
 									<p class="text-destructive text-xs">{symbolError}</p>
 								{:else}
 									<p class="text-muted-foreground text-sm">
-										Short identifier for your coin (e.g., BTC for Bitcoin). Will be displayed as *{symbol ||
+										Short identifier for your coin (e.g., BTC for Bitcoin). Will be displayed as *{symbol?.toUpperCase() ||
 											'SYMBOL'}
 									</p>
 								{/if}
