@@ -189,8 +189,7 @@
 					symbol: coin.symbol,
 					name: coin.name,
 					currentPrice: coin.currentPrice,
-					marketCap: coin.marketCap
-					currentPrice: coin.currentPrice,
+					marketCap: coin.marketCap,
 					priceChange24h: coin.change24h,
 					volume24h: coin.volume24h
 				})) || [];
