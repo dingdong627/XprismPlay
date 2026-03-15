@@ -52,9 +52,6 @@ export const user = pgTable(
 		flags: bigint('flags', { mode: 'bigint' }).notNull().default('0'), // Check /website/src/lib/data/flags.ts
 
 		// LEGACY: Getting removed after everything is done
-		isAdmin: boolean('is_admin').default(false),
-		isHeadAdmin: boolean('is_head_admin').default(false),
-		founderBadge: boolean('founder_badge').notNull().default(false),
 		disableMentions: boolean('disable_mentions').notNull().default(false),
 
 		isBanned: boolean('is_banned').default(false),
@@ -112,7 +109,6 @@ export const user = pgTable(
 		return {
 			usernameIdx: index('user_username_idx').on(table.username),
 			isBannedIdx: index('user_is_banned_idx').on(table.isBanned),
-			isAdminIdx: index('user_is_admin_idx').on(table.isAdmin),
 			createdAtIdx: index('user_created_at_idx').on(table.createdAt),
 			updatedAtIdx: index('user_updated_at_idx').on(table.updatedAt)
 		};

@@ -145,7 +145,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 					volumeMaster: user.volumeMaster,
 					volumeMuted: user.volumeMuted,
 					nameColor: user.nameColor,
-					founderBadge: user.founderBadge,
 					prestigeLevel: user.prestigeLevel,
 					disableMentions: user.disableMentions,
 					timezone: user.timezone
@@ -191,7 +190,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 					volumeMaster: parseFloat(userRecord.volumeMaster || '0.7'),
 					volumeMuted: userRecord.volumeMuted || false,
 					nameColor: userRecord.nameColor ?? null,
-					founderBadge: userRecord.founderBadge ?? false,
+					founderBadge: hasFlag(userRecord.flags, 'FOUNDER_BADGE') ?? false,
 					prestigeLevel: userRecord.prestigeLevel ?? 0,
 					disableMentions: userRecord.disableMentions ?? false,
 					hideAds: totalUsdSpent >= 499,

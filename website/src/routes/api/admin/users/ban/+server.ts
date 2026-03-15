@@ -2,10 +2,10 @@ import { auth } from '$lib/auth';
 import { error, json } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import { user, session } from '$lib/server/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { writeAdminLog } from '$lib/server/admin-log';
 import type { RequestHandler } from './$types';
-import { hasFlag } from '$lib/data/flags';
+import { hasFlag, UserFlags } from '$lib/data/flags';
 
 export const POST: RequestHandler = async ({ request }) => {
 	const authSession = await auth.api.getSession({ headers: request.headers });
@@ -64,7 +64,7 @@ export const POST: RequestHandler = async ({ request }) => {
 				.set({
 					isBanned: true,
 					banReason: reason.trim(),
-					isAdmin: false, // <-- Automatically strips admin status on ban
+					flags: sql`${targetUser.flags} & ~${UserFlags.IS_ADMIN}`, // <-- Automatically strips admin status on ban
 					updatedAt: new Date()
 				})
 				.where(eq(user.id, targetUser.id));
