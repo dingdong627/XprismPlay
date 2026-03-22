@@ -70,7 +70,14 @@ export async function GET({ params }) {
 		const holdingsValue = portfolioHoldings.reduce((total, holding) => {
 			const quantity = Number(holding.quantity);
 			const price = Number(holding.currentPrice);
-			return total + quantity * price;
+			const baseCurrency = Number(holding.poolBaseCurrencyAmount);
+			const coinAmount = Number(holding.poolCoinAmount);
+
+			var k = baseCurrency * coinAmount;
+			var newCoinAmount = coinAmount + quantity;
+			var newBaseCurrency = k / newCoinAmount;
+			var value = baseCurrency - newBaseCurrency;
+			return total + value;
 		}, 0);
 
 		const portfolioStats = {
