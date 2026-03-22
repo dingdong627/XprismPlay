@@ -128,7 +128,7 @@ async function getLeaderboardData() {
 					flags: user.flags,
 					nameColor: user.nameColor,
 					baseCurrencyBalance: user.baseCurrencyBalance,
-					coinValue: sql<number>`COALESCE(SUM(CAST(${userPortfolio.quantity} AS NUMERIC) * CAST(${coin.currentPrice} AS NUMERIC)), 0)`
+					coinValue: sql<number>`COALESCE(SUM(CAST(${coin.poolBaseCurrencyAmount} AS NUMERIC) * ( 1 - CAST(${coin.poolCoinAmount} AS NUMERIC) / (CAST(${coin.poolCoinAmount} AS NUMERIC) + CAST(${userPortfolio.quantity} AS NUMERIC)))), 0)`
 				})
 				.from(user)
 				.leftJoin(userPortfolio, eq(userPortfolio.userId, user.id))
@@ -153,7 +153,7 @@ async function getLeaderboardData() {
 					nameColor: user.nameColor,
 					flags: user.flags,
 					baseCurrencyBalance: user.baseCurrencyBalance,
-					coinValue: sql<number>`COALESCE(SUM(CAST(${userPortfolio.quantity} AS NUMERIC) * CAST(${coin.currentPrice} AS NUMERIC)), 0)`
+					coinValue: sql<number>`COALESCE(SUM(CAST(${coin.poolBaseCurrencyAmount} AS NUMERIC) * ( 1 - CAST(${coin.poolCoinAmount} AS NUMERIC) / (CAST(${coin.poolCoinAmount} AS NUMERIC) + CAST(${userPortfolio.quantity} AS NUMERIC)))), 0)`
 				})
 				.from(user)
 				.leftJoin(userPortfolio, eq(userPortfolio.userId, user.id))
@@ -168,7 +168,7 @@ async function getLeaderboardData() {
 				)
 				.orderBy(
 					desc(
-						sql`CAST(${user.baseCurrencyBalance} AS NUMERIC) + COALESCE(SUM(CAST(${userPortfolio.quantity} AS NUMERIC) * CAST(${coin.currentPrice} AS NUMERIC)), 0)`
+						sql`CAST(${user.baseCurrencyBalance} AS NUMERIC) + COALESCE(SUM(CAST(${coin.poolBaseCurrencyAmount} AS NUMERIC) * ( 1 - CAST(${coin.poolCoinAmount} AS NUMERIC) / (CAST(${coin.poolCoinAmount} AS NUMERIC) + CAST(${userPortfolio.quantity} AS NUMERIC)))), 0)`
 					)
 				)
 				.limit(10)
@@ -233,8 +233,8 @@ async function getSearchedUsers(query: string, limit = 9, offset = 0) {
 				bio: user.bio,
 				flags: user.flags,
 				baseCurrencyBalance: user.baseCurrencyBalance,
-				coinValue: sql<number>`COALESCE(SUM(CAST(${userPortfolio.quantity} AS NUMERIC) * CAST(${coin.currentPrice} AS NUMERIC)), 0)`,
-				totalPortfolioValue: sql<number>`CAST(${user.baseCurrencyBalance} AS NUMERIC) + COALESCE(SUM(CAST(${userPortfolio.quantity} AS NUMERIC) * CAST(${coin.currentPrice} AS NUMERIC)), 0)`,
+				coinValue: sql<number>`COALESCE(SUM(CAST(${coin.poolBaseCurrencyAmount} AS NUMERIC) * ( 1 - CAST(${coin.poolCoinAmount} AS NUMERIC) / (CAST(${coin.poolCoinAmount} AS NUMERIC) + CAST(${userPortfolio.quantity} AS NUMERIC)))), 0)`,
+				totalPortfolioValue: sql<number>`CAST(${user.baseCurrencyBalance} AS NUMERIC) + COALESCE(SUM(CAST(${coin.poolBaseCurrencyAmount} AS NUMERIC) * ( 1 - CAST(${coin.poolCoinAmount} AS NUMERIC) / (CAST(${coin.poolCoinAmount} AS NUMERIC) + CAST(${userPortfolio.quantity} AS NUMERIC)))), 0)`,
 				createdAt: user.createdAt
 			})
 			.from(user)
