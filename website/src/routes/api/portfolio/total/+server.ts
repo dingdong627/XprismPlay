@@ -24,6 +24,8 @@ export async function GET({ request }) {
 			.select({
 				quantity: userPortfolio.quantity,
 				currentPrice: coin.currentPrice,
+				poolBaseCurrencyAmount: coin.poolBaseCurrencyAmount,
+				poolCoinAmount: coin.poolCoinAmount,
 				symbol: coin.symbol,
 				icon: coin.icon,
 				change24h: coin.change24h,
@@ -44,7 +46,13 @@ export async function GET({ request }) {
 		holdings.map(async (holding) => {
 			const quantity = Number(holding.quantity);
 			const price = Number(holding.currentPrice);
-			const value = quantity * price;
+			const baseCurrency = Number(holding.poolBaseCurrencyAmount);
+			const coinAmount = Number(holding.poolCoinAmount);
+
+			var k = baseCurrency * coinAmount;
+			var newCoinAmount = coinAmount + quantity;
+			var newBaseCurrency = k / newCoinAmount;
+			var value = baseCurrency - newBaseCurrency;
 			totalCoinValue += value;
 
 			const allTransactions = await db
